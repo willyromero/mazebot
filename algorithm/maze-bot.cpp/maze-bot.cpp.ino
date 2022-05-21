@@ -16,11 +16,11 @@ const int waitTime = 10000;   //espera entre fases
 const int speed = 50;      //velocidad de giro
 
 //Pines de sensores
-const int pinSensorLeft = 2;
+const int pinSensorRight = 2;
 
 const int pinSensorMiddle = 11;
 
-const int pinSensorRight = 12;
+const int pinSensorLeft = 12;
 
 //Estados de direccion de movimiento
 enum moveDirection {
@@ -32,35 +32,37 @@ int values[3];
 
 void setup() {
   Serial.begin(9600);   //iniciar puerto serie
-  pinMode(pinSensorLeft , INPUT);
-  pinMode(pinSensorMiddle , INPUT);
   pinMode(pinSensorRight , INPUT);
+  pinMode(pinSensorMiddle , INPUT);
+  pinMode(pinSensorLeft , INPUT);
 }
 
 // ←→↑↓↩↪
 
 void loop() {
 
-  values[0] = digitalRead(pinSensorRight);
+  values[0] = digitalRead(pinSensorLeft);
   values[1] = digitalRead(pinSensorMiddle);
-  values[2] = digitalRead(pinSensorLeft);
+  values[2] = digitalRead(pinSensorRight);
 
   Serial.println(analogRead(pinSensorMiddle));
   Serial.println("↑");
   enableMotors();
-  move(forward, 50);
+  move(forward, 10);
 
   if (values[0] != HIGH) {
     Serial.println("Detectado obstaculo -> Izq");
   }
   if (values[1] != HIGH) {
-    //Serial.println("Detectado obstaculo -> Med");
-    Serial.println(" ↑");
+    Serial.println("Detectado obstaculo -> Med");
+    //Serial.println(" ↑");
+    move(forward, 20);
     fullStop();
   }
   if (values[2] != HIGH) {
     Serial.println("Detectado obstaculo -> Der");
   }
+  delay(1000);
 }
 
 
